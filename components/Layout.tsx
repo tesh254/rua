@@ -1,6 +1,7 @@
 import getConfig from "next/config";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import Footer from "./footer";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -10,9 +11,10 @@ type LayoutProps = {
   date?: string;
   socialPreview?: string;
   children: React.ReactNode;
+  has_footer: boolean;
 };
 
-const Layout = ({ children, ...customMeta }: LayoutProps) => {
+const Layout = ({ children, has_footer, ...customMeta }: LayoutProps) => {
   const router = useRouter();
   const { asPath } = router;
 
@@ -79,7 +81,8 @@ const Layout = ({ children, ...customMeta }: LayoutProps) => {
         )}
         <title key="title">{meta.title}</title>
       </Head>
-      <main>{children}</main>
+      <main className="max-w-xl mx-auto font-sans">{children}</main>
+      {has_footer && <Footer />}
     </>
   );
 };
