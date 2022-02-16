@@ -4,23 +4,33 @@ import Layout from "@/components/Layout";
 import Image from "next/image";
 
 import { HOME_PAGE_COPY } from "copy/homepage";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const { publicRuntimeConfig } = getConfig();
-const { name } = publicRuntimeConfig.site;
+// const { name } = publicRuntimeConfig.site;
 
 const Home = () => {
+  const router = useRouter();
+
   return (
     <Layout has_footer={true}>
       <section className="py-4">
-        <section className="flex justify-center">
+        <section className="flex justify-between">
           <Image
             src="/images/rua-logo-gray.svg"
             alt="rua-logo"
             width={87.57}
             height={26}
           />
+
+          <Link href={`/access?form=signin`}>
+            <a className="font-extrabold">Sign In</a>
+          </Link>
         </section>
-        <section className="py-4 text-center">
+        <section className="pb-4 pt-16 text-center">
           <h1 className="font-extrabold text-5xl">
             A digest for all your newsletter subscription
           </h1>
@@ -30,14 +40,16 @@ const Home = () => {
           </p>
         </section>
         <section className="flex justify-center">
-          <button className="flex justify-between bg-black place-items-center py-2 px-4 rounded-lg text-white">
-            {/* <img
-              src="/images/twitter-icon.svg"
-              className="w-5"
-              alt="twitter icon"
-            /> */}
-            <p className="font-bold my-0 mx-2">Try it now</p>
-          </button>
+          <section className="flex flex-col place-items-center">
+            <button
+              onClick={() => {
+                router.push(`/access?form=signup`);
+              }}
+              className="flex w-full text-center justify-center bg-black place-items-center py-2 rounded-lg text-white"
+            >
+              <p className="font-bold my-1 mx-16">Try it now</p>
+            </button>
+          </section>
         </section>
         <section className="w-95 h-96 bg-gray-400 my-4 rounded-lg"></section>
         <section className="my-4 flex justify-center">
@@ -47,7 +59,10 @@ const Home = () => {
             <ol className="text-left">
               {HOME_PAGE_COPY.main_items.map((item, idx) => {
                 return (
-                  <li className="my-3 flex place-items-center justify-equal">
+                  <li
+                    key={idx}
+                    className="my-3 flex place-items-center justify-equal"
+                  >
                     <span className="font-bold text-2xl">{idx + 1}.</span>
                     <section className="ml-2">
                       <p className="font-medium text-2xl my-1">{item.title}</p>

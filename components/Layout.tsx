@@ -81,7 +81,7 @@ const Layout = ({ children, has_footer, ...customMeta }: LayoutProps) => {
         )}
         <title key="title">{meta.title}</title>
       </Head>
-      <main className="max-w-xl mx-auto font-sans">{children}</main>
+      <main className="max-w-screen-lg mx-auto font-sans">{children}</main>
       {has_footer && <Footer />}
     </>
   );
