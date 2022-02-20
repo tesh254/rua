@@ -35,6 +35,7 @@ export async function oauthGetUserById(userId, { oauthAccessToken, oauthAccessTo
 export async function getOAuthAccessTokenWith({ oauthRequestToken, oauthRequestTokenSecret, oauthVerifier }: ITokenHandler): Promise<IRequestResponse> {
     return new Promise((resolve, reject) => {
         oauthConsumer.getOAuthAccessToken(oauthRequestToken, oauthRequestTokenSecret, oauthVerifier, function (error, oauthAccessToken, oauthAccessTokenSecret, results) {
+            console.log(error, ">>>>>>>>>>>>")
             return error
                 ? reject(new Error('Error getting OAuth access token', error.message))
                 : resolve({ oauthAccessToken, oauthAccessTokenSecret, results })

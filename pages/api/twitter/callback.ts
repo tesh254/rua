@@ -1,15 +1,12 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
-import { setCookie } from 'utils/cookies';
+// import { setCookie } from 'utils/cookies';
+import { parseCookies, setCookie } from 'nookies';
 import { getOAuthAccessTokenWith, oauthGetUserById } from 'utils/twitter';
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        console.log(req.cookies.oauthData);
-        
-        const oauthData = JSON.parse(req.cookies.oauthData);
-
-        console.log(oauthData);
+        const oauthData = JSON.parse(parseCookies({ req}).oauthData);
 
         const { oauth_verifier: oauthVerifier }: any = req.query;
 
@@ -53,15 +50,23 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
         const backendResponse = await axios.request(options);
 
-        const { data: {
-            data : {
+        console.log(backendResponse.data);
+
+        const {
+            data: {
                 authenticateUser: {
                     token
                 }
             }
-        } } = backendResponse.data;
+        } = backendResponse.data;
 
-        setCookie(res, "backend_token", token);
+        // setCookie(res, "backend_token", token);
+        // nookies.set()
+
+        setCookie({ res }, 'backend_token', token, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+        })
 
         res.redirect('/inbox')
     } catch (error) {
