@@ -43,11 +43,11 @@ const Home = () => {
           <section className="flex flex-col place-items-center">
             <button
               onClick={() => {
-                router.push(`/access?form=signup`);
+                router.push(`/api/twitter/authorize`);
               }}
               className="flex w-full text-center justify-center bg-black place-items-center py-2 rounded-lg text-white"
             >
-              <p className="font-bold my-1 mx-16">Try it now</p>
+              <p className="font-bold my-1 mx-16">Sign in with Twitter</p>
             </button>
           </section>
         </section>
