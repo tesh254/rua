@@ -5,8 +5,13 @@ import { ClerkProvider } from "@clerk/nextjs";
 import apolloClient from "../lib/apollo";
 
 import "@/styles/global.css";
+import { NextPageContext } from "next";
+import { parseCookies } from "nookies";
+import { handleQuery } from "helpers/axios-graphql";
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps, ...rest }: AppProps) => {
+  console.log({ pageProps, rest })
+
   return (
     <ClerkProvider>
       <ApolloProvider client={apolloClient}>
@@ -39,5 +44,57 @@ const App = ({ Component, pageProps }: AppProps) => {
     </ClerkProvider>
   );
 };
+
+export async function getServerSideProps(ctx: NextPageContext) {
+  const cookies = parseCookies(ctx);
+
+  if (cookies.backend_token) {
+    try {
+      const query = `
+        query {
+            profile {
+                id
+                username
+                email
+                in_app_email
+            }
+        }
+    `;
+
+    const { data: {
+      data: {
+        profile
+      }
+    } } = await handleQuery(
+      query,
+      {},
+      {
+        authorization: `Bearer ${cookies.backend_token}`,
+      }
+    );
+
+    return {
+      props: {
+        account: profile,
+      }
+    }
+
+    } catch (error ) {
+      console.log(error);
+
+      return {
+        props: {
+          account: null,
+        }
+      }
+    }
+  } else {
+    return {
+      props: {
+        account: null,
+      }
+    }
+  }
+}
 
 export default App;
