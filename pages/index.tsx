@@ -4,8 +4,6 @@ import Layout from "@/components/Layout";
 import Image from "next/image";
 
 import { HOME_PAGE_COPY } from "copy/homepage";
-import { useState } from "react";
-import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -17,6 +15,7 @@ const Home = () => {
 
   return (
     <Layout has_footer={true}>
+      
       <section className="py-4">
         <section className="flex justify-between">
           <Image
