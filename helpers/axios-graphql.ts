@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-console.log(process.env.GRAPHQL_URL);
-
 const graphqlClient = axios.create({
     url: process.env.GRAPHQL_URL,
     headers: {

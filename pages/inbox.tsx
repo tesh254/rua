@@ -8,6 +8,9 @@ import { handleQuery } from "helpers/axios-graphql";
 import withAuth from "hoc/with-auth";
 import Script from "next/script";
 import { useEffect } from "react";
+import Layout from "@/components/layout";
+import Link from "next/link";
+import { useAuth } from "@/context/auth";
 
 type Props = {
   profile: {
@@ -20,6 +23,13 @@ type Props = {
 };
 
 const Inbox: NextPage<Props> = ({ profile }) => {
+
+  const { updateProfile } = useAuth();
+
+
+  useEffect(() => {
+    updateProfile(profile);
+  }, [])
   const parseCookie = (str: string) =>
     str
       .split(";")
@@ -29,10 +39,6 @@ const Inbox: NextPage<Props> = ({ profile }) => {
         return acc;
       }, {});
 
-  useEffect(() => {
-    console.log({ cookie: parseCookie(document.cookie) });
-  }, []);
-
   function handlePayment() {
     window.Paddle.Checkout.open({
       product: Number(process.env.NEXT_PUBLIC_PADDLE_PRODUCT_ID),
@@ -41,14 +47,12 @@ const Inbox: NextPage<Props> = ({ profile }) => {
         if (err) {
           console.error(err);
         }
-
-        console.log(data);
       },
     });
   }
 
   return (
-    <section>
+    <Layout has_footer={false} has_nav={true}>
       <Script
         src="https://cdn.paddle.com/paddle/paddle.js"
         id="paddle-js"
@@ -63,8 +67,113 @@ const Inbox: NextPage<Props> = ({ profile }) => {
           });
         }}
       />
-      <button onClick={handlePayment}>Buy now</button>
-    </section>
+      <section className="flex flex-wrap mb-[20px]">
+        <section className="shadow-md min-w-[250px] rounded-md flex flex-col w-fit p-[20px] mr-[8px] my-[8px]">
+          <span className="font-extrabold my-[6px]">12</span>
+          <span className="font-light my-[6px]">Subscriptions</span>
+        </section>
+        <section className="shadow-md min-w-[250px] rounded-md flex flex-col w-fit p-[20px] mr-[8px] my-[8px]">
+          <span className="font-extrabold my-[6px]">150</span>
+          <span className="font-light my-[6px]">Issues</span>
+        </section>
+        <section className="shadow-md min-w-[250px] rounded-md flex flex-col w-fit p-[20px] mr-[8px] my-[8px]">
+          <span className="font-extrabold my-[6px]">3</span>
+          <Link href="/issues">
+            <a className="font-light my-[6px] flex">
+              <span className="mr-2"> Unread </span>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </a>
+          </Link>
+        </section>
+      </section>
+      <hr />
+      <section className="py-[20px]">
+        <h2 className="font-bold">New Issues</h2>
+        <section className="flex flex-col">
+          <section className="border-b-2 flex place-items-center justify-between py-4">
+            <p>
+              <strong>Cody and Noel's 💩 Stories </strong> by{" "}
+              <strong>podcasts@tmgstudios.tv </strong>
+              dropped <strong>7hrs ago</strong>
+            </p>
+            <button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
+          </section>
+          <section className="border-b-2 flex place-items-center justify-between py-4">
+            <p>
+              <strong>High Beems</strong> by <strong>The Publish Press </strong>
+              dropped <strong>7hrs ago</strong>
+            </p>
+            <button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
+          </section>
+          <section className="border-b-2 flex place-items-center justify-between py-4">
+            <p>
+              <strong>☕️ Tense</strong> by{" "}
+              <strong>crew@morningbrew.com </strong>
+              dropped <strong>4hrs ago</strong>
+            </p>
+            <button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
+          </section>
+        </section>
+      </section>
+    </Layout>
   );
 };
 
@@ -79,6 +188,3 @@ export const getServerSideProps = (ctx: NextPageContext) => {
 };
 
 export default Inbox;
-
-
-  

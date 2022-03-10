@@ -1,6 +1,6 @@
 import getConfig from "next/config";
 
-import Layout from "@/components/Layout";
+import Layout from "@/components/layout";
 import Image from "next/image";
 
 import { HOME_PAGE_COPY } from "copy/homepage";

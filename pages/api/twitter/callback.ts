@@ -50,8 +50,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
         const backendResponse = await axios.request(options);
 
-        console.log(backendResponse.data);
-
         const {
             data: {
                 authenticateUser: {
@@ -71,7 +69,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         res.redirect('/inbox')
     } catch (error) {
         // TODO: redirect to no user error page
-        console.log(error);
         res.status(400).json({
             message: 'error signing in'
         })

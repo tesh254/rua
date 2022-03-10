@@ -1,7 +1,10 @@
+import { useState } from "react";
 import getConfig from "next/config";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Footer from "./footer";
+import Footer from "../footer";
+import Nav from "../nav";
+import { WithNavLayout, WithoutNav } from "./styled-components";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -12,9 +15,16 @@ type LayoutProps = {
   socialPreview?: string;
   children: React.ReactNode;
   has_footer: boolean;
+  has_nav?: boolean;
 };
 
-const Layout = ({ children, has_footer, ...customMeta }: LayoutProps) => {
+const Layout = ({
+  children,
+  has_footer,
+  has_nav,
+  ...customMeta
+}: LayoutProps) => {
+  const [hasNav, setHasNav] = useState(true);
   const router = useRouter();
   const { asPath } = router;
 
@@ -81,7 +91,16 @@ const Layout = ({ children, has_footer, ...customMeta }: LayoutProps) => {
         )}
         <title key="title">{meta.title}</title>
       </Head>
-      <main className="max-w-screen-lg mx-auto font-sans">{children}</main>
+      <main
+        className={`max-w-screen-lg mx-auto px-8 py-4 font-sans ${
+          hasNav ? WithNavLayout : WithoutNav
+        }`}
+      >
+        <aside className="h-screen">
+          {has_nav && <Nav setHasNav={setHasNav} hasNav={hasNav} />}
+        </aside>
+        <main>{children}</main>
+      </main>
       {has_footer && <Footer />}
     </>
   );

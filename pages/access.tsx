@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import Layout from "@/components/Layout";
+import Layout from "@/components/layout";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -14,8 +14,6 @@ const Access: FC<{}> = () => {
   const router = useRouter();
 
   const form_type = router.query?.form;
-
-  // console.log({ form_type });
 
   const __signIn = async () => {
     if (state.email && state.username) {
