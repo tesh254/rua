@@ -23,13 +23,11 @@ type Props = {
 };
 
 const Inbox: NextPage<Props> = ({ profile }) => {
-
   const { updateProfile } = useAuth();
-
 
   useEffect(() => {
     updateProfile(profile);
-  }, [])
+  }, []);
   const parseCookie = (str: string) =>
     str
       .split(";")
@@ -39,6 +37,9 @@ const Inbox: NextPage<Props> = ({ profile }) => {
         return acc;
       }, {});
 
+  useEffect(() => {
+    console.log(parseCookie(document.cookie));
+  }, []);
   function handlePayment() {
     window.Paddle.Checkout.open({
       product: Number(process.env.NEXT_PUBLIC_PADDLE_PRODUCT_ID),

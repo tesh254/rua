@@ -22,9 +22,19 @@ export function AuthProvider({children}: {
     children: JSX.Element
 }) {
     const [profile, setProfile] = useState(null);
+    const [feed, setFeed] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [pages, setPages] = useState(0);
+    const [cursor, setCursor] = useState<string | null>(null);
+    const [order, setOrder] = useState('asc');
 
     function updateProfile(account: Profile) {
         setProfile(account);
+    }
+
+    function getIssues() {
+
     }
 
     return(
