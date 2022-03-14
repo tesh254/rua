@@ -204,6 +204,7 @@ const Inbox: NextPage<Props> = ({ profile }) => {
 
 export const getServerSideProps = (ctx: NextPageContext) => {
   return withAuth(ctx, async (profile) => {
+    
     return {
       props: {
         profile,

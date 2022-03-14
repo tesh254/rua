@@ -1,8 +1,7 @@
 import { useAuth } from "@/context/auth";
-import { generateSVG } from "@/lib/avatar";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 
 const NAV_LINKS: {
   label: string;
@@ -36,6 +35,7 @@ type NavProps = {
 const url = process.env.NEXT_PUBLIC_API_URL;
 
 function Nav(props: NavProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { profile } = useAuth();
 
@@ -92,10 +92,14 @@ function Nav(props: NavProps) {
         </>
       )}
       {!props.hasNav && (
-        <Link href="/account">
-          <a className="flex place-items-center">
+        // <Link href="/account">
+        <section className="relative">
+          <section
+            className="flex place-items-center"
+            onClick={() => setIsOpen(!isOpen)}
+          >
             <img
-              className="h-10 mr-2"
+              className="h-8 mr-2"
               src={
                 profile?.username && `/api/avatar?username=${profile?.username}`
               }
@@ -115,8 +119,39 @@ function Nav(props: NavProps) {
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-          </a>
-        </Link>
+          </section>
+          {isOpen && (
+            <section className="absolute right-0 bg-white px-2 py-2 rounded-md drop-shadow-md border-1 border-gray-400">
+              <ul className="list-none w-[200px] border-1 z-10 divide-y">
+                <li className="py-2 px-1 select-none cursor-pointer">
+                  <Link href="/account">
+                    <a>Account</a>
+                  </Link>
+                </li>
+                <li className="py-2 px-1 select-none cursor-pointer">
+                  <Link href="/issues">
+                    <a>Issues</a>
+                  </Link>
+                </li>
+                <li
+                  className="py-2 px-2 select-none flex place-items-center cursor-pointer"
+                  onClick={() => props.setHasNav(!props.hasNav)}
+                >
+                  <svg
+                    className="w-6 h-6 mr-[8px]"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                  <span>Open side menu</span>
+                </li>
+              </ul>
+            </section>
+          )}
+        </section>
+        // </Link>
       )}
     </section>
   );
