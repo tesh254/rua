@@ -26,6 +26,7 @@
     "goober": "^2.1.8",
     "goober-autoprefixer": "^1.2.1",
     "graphql": "^16.3.0",
+    "html-react-parser": "^1.4.8",
     "next": "^12.1.0",
     "nookies": "^2.5.2",
     "oauth": "^0.9.15",
