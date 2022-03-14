@@ -68,6 +68,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
         res.redirect('/inbox')
     } catch (error) {
+        console.log(error)
         // TODO: redirect to no user error page
         res.status(400).json({
             message: 'error signing in'

@@ -16,12 +16,14 @@ type LayoutProps = {
   children: React.ReactNode;
   has_footer: boolean;
   has_nav?: boolean;
+  is_readonly?: boolean;
 };
 
 const Layout = ({
   children,
   has_footer,
   has_nav,
+  is_readonly,
   ...customMeta
 }: LayoutProps) => {
   const [hasNav, setHasNav] = useState(true);
@@ -91,7 +93,7 @@ const Layout = ({
         )}
         <title key="title">{meta.title}</title>
       </Head>
-      <main
+      {!is_readonly && <main
         className={`max-w-screen-lg mx-auto px-8 py-4 font-sans ${
           hasNav ? WithNavLayout : WithoutNav
         }`}
@@ -100,7 +102,12 @@ const Layout = ({
           {has_nav && <Nav setHasNav={setHasNav} hasNav={hasNav} />}
         </aside>
         <main>{children}</main>
-      </main>
+      </main>}
+      {
+        is_readonly && <main className="max-w-screen-lg mx-auto py-2 font-sans">
+            {children}
+          </main>
+      }
       {has_footer && <Footer />}
     </>
   );

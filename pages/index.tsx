@@ -14,8 +14,7 @@ const Home = () => {
   const router = useRouter();
 
   return (
-    <Layout has_footer={true} has_nav={false}>
-      
+    <Layout has_footer={true} is_readonly={true}>
       <section className="py-4">
         <section className="flex justify-between">
           <Image
