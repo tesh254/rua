@@ -4,12 +4,24 @@ import { useEffect } from "react";
 import Layout from "@/components/layout";
 import Link from "next/link";
 import { parseCookies } from "nookies";
-import { getAllIssues, getSingleIssue } from "@/context/issues/services";
+import { getAllIssues } from "@/context/issues/services";
+import IssueCard, { IssueProps } from "@/components/issue-card";
 
-const Issues: NextPage<any> = ({ issue }) => {
+const Issues: NextPage<{
+  issues: IssueProps[];
+}> = ({ issues }) => {
   return (
     <Layout has_footer={false} has_nav={true}>
-      <section className="w-full">This is a newsletter issue</section>
+      <section className="py-[20px]">
+        <h2 className="text-2xl">
+          Issues
+        </h2>
+        {issues.map((issue) => {
+          return (
+            <IssueCard {...issue} is_alert={false} key={issue.id} />
+          )
+        })}
+      </section>
     </Layout>
   );
 };
@@ -30,17 +42,15 @@ export const getServerSideProps = (ctx: NextPageContext) => {
         }
       );
 
-      console.log(response)
-
       return {
         props: {
-          issue: {},
+          issues: response.feed,
         },
       };
     } catch (error: unknown) {
       return {
         props: {
-          issue: {},
+          issues: []
         },
       };
     }

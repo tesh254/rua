@@ -6,32 +6,32 @@ export async function getAllIssues(variables: {
     order: string;
     page: number;
 }, headers) {
-    const query = `
-        query feed_default_filter($limit: Int!, $order: String!, $page: Int!){
-            feed_default_filter(limit: $limit, order: $order, page: $page) {
-                feed {
-                    id
-                    title
-                    feed_hosted_url
-                    is_read
-                    is_hidden
-                    subscription {
-                        id
-                        source_email
-                        source_name
-                        platform_domain
-                        source_avatar
-                        created_at
-                        updated_at
-                    }
-                    created_at
-                    updated_at
+    const query = `        
+        query feed_default($limit: Int!, $order: String!, $page: Int!){
+            feed_default(limit: $limit, order: $order, page: $page) {
+            feed {
+                id
+                title
+                feed_hosted_url
+                is_read
+                is_hidden
+                subscription {
+                id
+                source_email
+                source_name
+                platform_domain
+                source_avatar
+                created_at
+                updated_at
                 }
-                limit
-                total_pages
-                current_page
-                cursor
-                order
+                created_at
+                updated_at
+            }
+            limit
+            total_pages
+            current_page
+            cursor
+            order
             }
         }
     `;
@@ -41,13 +41,13 @@ export async function getAllIssues(variables: {
 
         const { data, error } = response.data;
 
-        console.log({data})
+        console.log({ data: data.feed_default.feed });
 
         if (error) {
             throw new Error("Error fetching issue");
         }
 
-        return data;
+        return data.feed_default;
     } catch (error: unknown) {
         return error;
     }
