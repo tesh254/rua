@@ -41,6 +41,8 @@ export async function getAllIssues(variables: {
 
         const { data, error } = response.data;
 
+        console.log({data})
+
         if (error) {
             throw new Error("Error fetching issue");
         }

@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import Layout from "@/components/layout";
 import Link from "next/link";
 import { parseCookies } from "nookies";
-import { getSingleIssue } from "@/context/issues/services";
+import { getAllIssues, getSingleIssue } from "@/context/issues/services";
 
-const SingleIssue: NextPage<any> = ({ issue }) => {
+const Issues: NextPage<any> = ({ issue }) => {
   return (
     <Layout has_footer={false} has_nav={true}>
       <section className="w-full">This is a newsletter issue</section>
@@ -19,19 +19,22 @@ export const getServerSideProps = (ctx: NextPageContext) => {
     const cookies = parseCookies(ctx);
 
     try {
-      const queryId: unknown = ctx.query.id;
-      const response = await getSingleIssue(
+      const response = await getAllIssues(
         {
-          feed_id: queryId as string,
+          limit: 5,
+          order: "asc",
+          page: 1,
         },
         {
           Authorization: `Bearer ${cookies.backend_token}`,
         }
       );
 
+      console.log(response)
+
       return {
         props: {
-          issue: response,
+          issue: {},
         },
       };
     } catch (error: unknown) {
@@ -44,4 +47,4 @@ export const getServerSideProps = (ctx: NextPageContext) => {
   });
 };
 
-export default SingleIssue;
+export default Issues;
