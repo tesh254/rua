@@ -9,7 +9,7 @@ const NAV_LINKS: {
   isComingSoon?: boolean;
 }[] = [
   {
-    label: "Dashboard",
+    label: "Inbox",
     link: "/inbox",
   },
   {
@@ -41,7 +41,7 @@ function Nav(props: NavProps) {
 
   return (
     <section
-      className={`relative ${
+      className={`fixed ${
         !props.hasNav && "flex justify-between place-items-center py-2"
       }`}
     >
