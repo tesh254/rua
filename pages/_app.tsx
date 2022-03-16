@@ -20,6 +20,7 @@ setup(React.createElement, prefix);
 const App = ({ Component, pageProps, ...rest }: AppProps) => {
   return (
     <ApolloProvider client={apolloClient}>
+      <Toaster />
       <AuthProvider>
         <Component {...pageProps} />
       </AuthProvider>

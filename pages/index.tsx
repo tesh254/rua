@@ -49,7 +49,9 @@ const Home = () => {
             </button>
           </section>
         </section>
-        <section className="w-95 h-96 bg-gray-400 my-4 rounded-lg"></section>
+        <section className="w-95 h-96 my-4 flex justify-center rounded-lg">
+          <img src="/images/inbox-preview.png" alt="inbox-preview" />
+        </section>
         <section className="my-4 flex justify-center">
           <section className="text-center">
             <h2 className="font-bold text-3xl">{HOME_PAGE_COPY.main_title}</h2>

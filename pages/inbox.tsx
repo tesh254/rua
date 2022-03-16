@@ -14,6 +14,7 @@ import { useAuth } from "@/context/auth";
 import { parseCookies } from "nookies";
 import { getAllIssues } from "@/context/issues/services";
 import IssueCard, { IssueProps } from "@/components/issue-card";
+import toast from "react-hot-toast";
 
 type Props = {
   profile: {
@@ -90,6 +91,8 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
     inAppEmailRef?.current.setSelectionRange(0, 99999);
 
     navigator.clipboard.writeText(inAppEmailRef?.current.value);
+
+    toast.success("Copied to clipboard");
   }
 
   return (
