@@ -7,7 +7,7 @@ import apolloClient from "@/lib/apollo";
 import { handleQuery } from "helpers/axios-graphql";
 import withAuth from "hoc/with-auth";
 import Script from "next/script";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Layout from "@/components/layout";
 import Link from "next/link";
 import { useAuth } from "@/context/auth";
@@ -82,6 +82,16 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
     });
   }
 
+  const inAppEmailRef: any = useRef();
+
+  function onCopy() {
+    inAppEmailRef?.current.select();
+
+    inAppEmailRef?.current.setSelectionRange(0, 99999);
+
+    navigator.clipboard.writeText(inAppEmailRef?.current.value);
+  }
+
   return (
     <Layout has_footer={false} has_nav={true}>
       <Script
@@ -98,37 +108,33 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
           });
         }}
       />
-      <section className="flex flex-wrap mb-[20px]">
-        <section className="shadow-md min-w-[250px] rounded-md flex flex-col w-fit p-[20px] mr-[8px] my-[8px]">
-          <span className="font-extrabold my-[6px]">12</span>
-          <span className="font-light my-[6px]">Subscriptions</span>
-        </section>
-        <section className="shadow-md min-w-[250px] rounded-md flex flex-col w-fit p-[20px] mr-[8px] my-[8px]">
-          <span className="font-extrabold my-[6px]">150</span>
-          <span className="font-light my-[6px]">Issues</span>
-        </section>
-        <section className="shadow-md min-w-[250px] rounded-md flex flex-col w-fit p-[20px] mr-[8px] my-[8px]">
-          <span className="font-extrabold my-[6px]">3</span>
-          <Link href="/issues">
-            <a className="font-light my-[6px] flex">
-              <span className="mr-2"> Unread </span>
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </a>
-          </Link>
-        </section>
+      <section className="flex flex-wrap justify-center mb-[20px]">
+        <div className="flex flex-col place-items-center">
+          <h1 className="my-2 text-[32px]">
+            Welcome{" "}
+            <strong className="text-[#CB0C0C]">{profile.username}</strong>,
+          </h1>
+          <div className="my-2 relative select-none py-4 px-2 shadow-[0px_0px_3px_rgba(0,0,0,0.25)] flex justify-center place-items-center min-w-[400px] w-full rounded-[8px]">
+            <input
+              ref={inAppEmailRef}
+              type="text"
+              value={profile.in_app_email}
+              className="text-[rgba(0,0,0,0.6)] text-center text-[16px] font-bold w-[100%] bg-white select-none"
+              disabled
+            />
+            <svg
+              className="w-6 h-6 absolute right-[16px] top-[16px] text-[rgba(0,0,0,0.6)] cursor-pointer transition duration-300 hover:text-[rgba(0,0,0,0.8)]"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              role="button"
+              onClick={onCopy}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+              <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+            </svg>
+          </div>
+        </div>
       </section>
       <hr />
       <section className="py-[20px]">
@@ -143,7 +149,6 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
 
 export const getServerSideProps = (ctx: NextPageContext) => {
   return withAuth(ctx, async (profile) => {
-    
     const cookies = parseCookies(ctx);
 
     try {
@@ -158,19 +163,19 @@ export const getServerSideProps = (ctx: NextPageContext) => {
         }
       );
 
-      console.log({ response })
+      console.log({ response });
 
       return {
         props: {
           issues: response.feed,
-          profile
+          profile,
         },
       };
     } catch (error: unknown) {
       return {
         props: {
           issues: [],
-          profile
+          profile,
         },
       };
     }
