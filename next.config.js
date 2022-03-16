@@ -5,9 +5,9 @@ module.exports = {
       url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
-          : "https://rua.vercel.app",
+          : "https://userua.com",
       title: "Rua App",
-      description: "Rua App",
+      description: "All your newsletter issues in one place",
       socialPreview: "/images/preview.png",
     },
   },
