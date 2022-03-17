@@ -55,5 +55,10 @@ code {
 /* Your own custom utilities */
 
 iframe {
-  overflow-y: none;
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;
+}
+
+iframe::-webkit-scrollbar {
+  display: none !important;
 }

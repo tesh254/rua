@@ -16,6 +16,9 @@ const SingleIssue: NextPage<{
 
   useEffect(() => {
     updateProfile(profile);
+
+    console.log(s3_data.html)
+
   }, []);
 
   return (
@@ -29,8 +32,8 @@ const SingleIssue: NextPage<{
           <p className="text-[20px] text-gray-500 text-center">
             {issue.subscription.source_email}
           </p>
-          <section>
-            <iframe srcDoc={s3_data.html} className="w-full h-full max-h-[100vh] min-h-[80vh] overflow-y-hidden" frameBorder="0" />
+          <section className="shadow-inner shadow-xl">
+            <iframe srcDoc={s3_data.html} className="w-full h-full max-h-[100vh] min-h-[90vh]" frameBorder="0" />
           </section>
         </section>
       )}
