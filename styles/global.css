@@ -53,3 +53,7 @@ code {
 /* Stop purging. */
 
 /* Your own custom utilities */
+
+iframe {
+  overflow-y: none;
+}

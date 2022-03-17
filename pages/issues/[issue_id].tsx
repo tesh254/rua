@@ -29,7 +29,9 @@ const SingleIssue: NextPage<{
           <p className="text-[20px] text-gray-500 text-center">
             {issue.subscription.source_email}
           </p>
-          <section>{parse(s3_data.html)}</section>
+          <section>
+            <iframe srcDoc={s3_data.html} className="w-full h-full max-h-[100vh] min-h-[80vh] overflow-y-hidden" frameBorder="0" />
+          </section>
         </section>
       )}
     </Layout>
