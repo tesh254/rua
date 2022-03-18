@@ -157,7 +157,7 @@ export const getServerSideProps = (ctx: NextPageContext) => {
     try {
       const response = await getAllIssues(
         {
-          limit: 10,
+          limit: 20,
           order: "asc",
           page: 1,
         },
