@@ -29,8 +29,9 @@ const SingleIssue: NextPage<{
           <p className="text-[20px] text-gray-500 text-center">
             {issue.subscription.source_email}
           </p>
-          <section className="shadow-inner shadow-xl">
-            <iframe srcDoc={s3_data.html} className="w-full h-full max-h-[100vh] min-h-[90vh]" frameBorder="0" />
+          <section className="shadow-inner">
+            {parse(s3_data.html)}
+            {/* <iframe srcDoc={s3_data.html} className="w-full h-full max-h-[100vh] min-h-[90vh]" frameBorder="0" /> */}
           </section>
         </section>
       )}
