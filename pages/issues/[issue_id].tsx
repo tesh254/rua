@@ -16,9 +16,6 @@ const SingleIssue: NextPage<{
 
   useEffect(() => {
     updateProfile(profile);
-
-    console.log(s3_data.html)
-
   }, []);
 
   return (

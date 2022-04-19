@@ -20,6 +20,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
         const user = await oauthGetUserById(userId, { oauthAccessToken, oauthAccessTokenSecret });
 
+
         const userData = {
             email: user.email,
             username: user.screen_name,
@@ -68,7 +69,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
         res.redirect('/inbox')
     } catch (error) {
-        console.log(error)
         // TODO: redirect to no user error page
         res.status(400).json({
             message: 'error signing in'

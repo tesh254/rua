@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { setup } from "goober";
 import { prefix } from "goober-autoprefixer";
 import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider } from "@clerk/nextjs";
 import apolloClient from "../lib/apollo";
 
 import "@/styles/global.css";
@@ -12,12 +11,32 @@ import { NextPageContext } from "next";
 import { parseCookies } from "nookies";
 import { handleQuery } from "helpers/axios-graphql";
 import { AuthProvider } from "@/context/auth";
+import { parseCookieOnClient } from "utils/cookies";
 
 // This could be the best place to define it once.
 // Since `_app.js is running for both
 setup(React.createElement, prefix);
 
 const App = ({ Component, pageProps, ...rest }: AppProps) => {
+  function syncAuth() {
+    const parsedToken = parseCookieOnClient(document.cookie).backend_token;
+
+    if (parsedToken) {
+     localStorage.setItem("auth_token", parsedToken);
+    }
+  }
+
+  useEffect(() => {
+    syncAuth();
+    const interval = setInterval(() => {
+      syncAuth();
+    }, 5000)
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, []);
+
   return (
     <ApolloProvider client={apolloClient}>
       <Toaster />

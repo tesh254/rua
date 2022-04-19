@@ -50,10 +50,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
             message: "Error processing request",
         })
     }
-
-    // console.log(req.body);
-
-    // return res.status(200).json(req.body);
 }
 
 export default handler;

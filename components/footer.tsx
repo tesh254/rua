@@ -26,12 +26,12 @@ const LINKS = [
 
 const Footer: FC<{}> = () => {
   return (
-    <footer className="flex justify-between place-items-center max-w-xl mx-auto">
+    <footer className="flex justify-between place-items-center max-w-screen-md mx-auto">
       {LINKS.map((link) => {
         return (
           <section>
             <Link href={link.path}>
-              <a className="font-bold">{link.label}</a>
+              <a className="font-bold mx-2">{link.label}</a>
             </Link>
           </section>
         );

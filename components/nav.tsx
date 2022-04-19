@@ -6,24 +6,44 @@ import React, { useState } from "react";
 const NAV_LINKS: {
   label: string;
   link: string;
+  icon: JSX.Element;
   isComingSoon?: boolean;
 }[] = [
   {
     label: "Inbox",
     link: "/inbox",
-  },
-  {
-    label: "Issues",
-    link: "/issues",
-  },
-  {
-    label: "Highlights",
-    link: "/highlights",
-    isComingSoon: true,
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fillRule="evenodd"
+          d="M2.94 6.412A2 2 0 002 8.108V16a2 2 0 002 2h12a2 2 0 002-2V8.108a2 2 0 00-.94-1.696l-6-3.75a2 2 0 00-2.12 0l-6 3.75zm2.615 2.423a1 1 0 10-1.11 1.664l5 3.333a1 1 0 001.11 0l5-3.333a1 1 0 00-1.11-1.664L10 11.798 5.555 8.835z"
+          clipRule="evenodd"
+        />
+      </svg>
+    ),
   },
   {
     label: "Account",
     link: "/account",
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fillRule="evenodd"
+          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+          clipRule="evenodd"
+        />
+      </svg>
+    ),
   },
 ];
 
@@ -41,24 +61,27 @@ function Nav(props: NavProps) {
 
   return (
     <section
-      className={`fixed ${
-        !props.hasNav && "flex justify-between place-items-center py-2"
+      className={`fixed w-full bg-white z-[999] ${
+        props.hasNav && "flex justify-between place-items-center border-b-[1px]"
       }`}
     >
-      <img src="/images/rua..svg" />
+      {!props.hasNav && <img src="/images/rua..svg" />}
       {props.hasNav && (
         <>
-          <ul className="list-none">
+          <ul className="list-none flex w-full py-[8px] justify-center" style={{ margin: '0px'}}>
             {NAV_LINKS.map((navLink) => {
               return (
                 <li
                   key={navLink.link}
-                  className={`my-4 ${
-                    router.pathname === navLink.link && "font-extrabold"
+                  className={`mx-4 ${
+                    router.pathname === navLink.link && "text-[#CB0C0C] font-extrabold"
                   }`}
                 >
                   <Link href={navLink.link}>
                     <a className="flex place-items-center">
+                      <span className="mr-[8px]">
+                        {navLink.icon}
+                      </span>
                       <span>{navLink.label}</span>
                       {navLink.isComingSoon && (
                         <span className="p-1 text-xs ml-2 rounded-md bg-red-500 text-white">
@@ -71,24 +94,6 @@ function Nav(props: NavProps) {
               );
             })}
           </ul>
-          <section className="absolute">
-            <button onClick={() => props.setHasNav(!props.hasNav)}>
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
-                />
-              </svg>
-            </button>
-          </section>
         </>
       )}
       {!props.hasNav && (
@@ -120,36 +125,6 @@ function Nav(props: NavProps) {
               />
             </svg>
           </section>
-          {isOpen && (
-            <section className="absolute right-0 bg-white px-2 py-2 rounded-md drop-shadow-md border-1 border-gray-400">
-              <ul className="list-none w-[200px] border-1 z-10 divide-y">
-                <li className="py-2 px-1 select-none cursor-pointer">
-                  <Link href="/account">
-                    <a>Account</a>
-                  </Link>
-                </li>
-                <li className="py-2 px-1 select-none cursor-pointer">
-                  <Link href="/issues">
-                    <a>Issues</a>
-                  </Link>
-                </li>
-                <li
-                  className="py-2 px-2 select-none flex place-items-center cursor-pointer"
-                  onClick={() => props.setHasNav(!props.hasNav)}
-                >
-                  <svg
-                    className="w-6 h-6 mr-[8px]"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                  <span>Open side menu</span>
-                </li>
-              </ul>
-            </section>
-          )}
         </section>
         // </Link>
       )}

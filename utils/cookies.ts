@@ -21,3 +21,21 @@ export const setCookie = (
 
     res.setHeader('Set-Cookie', serialize(name, stringValue, options))
 }
+
+export const parseCookieOnClient = (
+    str: string
+): {
+    backend_token: string;
+} => {
+    const payload: unknown = str
+        .split(";")
+        .map((v) => v.split("="))
+        .reduce((acc, v) => {
+            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+            return acc;
+        }, {});
+
+    return payload as {
+        backend_token: string;
+    };
+}

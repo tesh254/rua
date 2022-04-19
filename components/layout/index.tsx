@@ -93,22 +93,17 @@ const Layout = ({
         )}
         <title key="title">{meta.title}</title>
       </Head>
-      {!is_readonly && <main
-        className={`max-w-screen-lg mx-auto px-8 py-4 font-sans ${
+      <section
+        className={`max-w-screen h-screen mx-auto font-sans ${
           hasNav ? WithNavLayout : WithoutNav
         }`}
       >
-        <aside className="h-screen">
+        <aside className="w-full h-[40px]">
           {has_nav && <Nav setHasNav={setHasNav} hasNav={hasNav} />}
         </aside>
-        <main>{children}</main>
-      </main>}
-      {
-        is_readonly && <main className="max-w-screen-lg mx-auto py-2 font-sans">
-            {children}
-          </main>
-      }
-      {has_footer && <Footer />}
+        <main className="max-w-screen-lg mx-auto w-full">{children}</main>
+        {has_footer && <Footer />}
+      </section>
     </>
   );
 };

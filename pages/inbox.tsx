@@ -1,20 +1,16 @@
 /// <reference path="../types.d.ts" />
 
 import type { NextPage, NextPageContext } from "next";
-// import { parseCookies } from "nookies";
-import { gql } from "@apollo/client";
-import apolloClient from "@/lib/apollo";
-import { handleQuery } from "helpers/axios-graphql";
+import { gql, useQuery } from "@apollo/client";
 import withAuth from "hoc/with-auth";
 import Script from "next/script";
 import { useEffect, useRef } from "react";
 import Layout from "@/components/layout";
-import Link from "next/link";
 import { useAuth } from "@/context/auth";
-import { parseCookies } from "nookies";
-import { getAllIssues } from "@/context/issues/services";
-import IssueCard, { IssueProps } from "@/components/issue-card";
+import { IssueProps } from "@/components/issue-card";
 import toast from "react-hot-toast";
+import { parseCookieOnClient } from "utils/cookies";
+import FeedList from "../components/feed";
 
 type Props = {
   profile: {
@@ -52,25 +48,12 @@ declare let window: {
 };
 
 const Inbox: NextPage<Props> = ({ profile, issues }) => {
-  console.log(issues);
-
   const { updateProfile } = useAuth();
 
   useEffect(() => {
     updateProfile(profile);
   }, []);
-  const parseCookie = (str: string) =>
-    str
-      .split(";")
-      .map((v) => v.split("="))
-      .reduce((acc, v) => {
-        acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-        return acc;
-      }, {});
 
-  useEffect(() => {
-    console.log(parseCookie(document.cookie));
-  }, []);
   function handlePayment() {
     window.Paddle.Checkout.open({
       product: Number(process.env.NEXT_PUBLIC_PADDLE_PRODUCT_ID),
@@ -111,22 +94,23 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
           });
         }}
       />
-      <section className="flex flex-wrap justify-center mb-[20px]">
-        <div className="flex flex-col place-items-center">
-          <h1 className="my-2 text-[32px]">
+      
+      <section className="flex flex-wrap justify-center">
+        <div className="flex flex-col place-items-center py-2">
+          <h1 className="text-[24px]">
             Welcome{" "}
             <strong className="text-[#CB0C0C]">{profile.username}</strong>,
           </h1>
-          <div className="my-2 relative select-none py-4 px-2 shadow-[0px_0px_3px_rgba(0,0,0,0.25)] flex justify-center place-items-center min-w-[400px] w-full rounded-[8px]">
+          <div className="my-[2px] relative select-none py-[8px] px-2 shadow-[0px_0px_3px_rgba(0,0,0,0.25)] flex justify-center place-items-center min-w-[300px] w-full rounded-[8px]">
             <input
               ref={inAppEmailRef}
               type="text"
               value={profile.in_app_email}
-              className="text-[rgba(0,0,0,0.6)] text-center text-[16px] font-bold w-[100%] bg-white select-none"
+              className="text-[rgba(0,0,0,0.6)] select-none text-center text-[16px] font-bold w-[100%] bg-white select-none"
               disabled
             />
             <svg
-              className="w-6 h-6 absolute right-[16px] top-[16px] text-[rgba(0,0,0,0.6)] cursor-pointer transition duration-300 hover:text-[rgba(0,0,0,0.8)]"
+              className="w-6 h-6 absolute right-[16px] top-[8px] text-[rgba(0,0,0,0.6)] cursor-pointer transition duration-300 hover:text-[rgba(0,0,0,0.8)]"
               fill="currentColor"
               viewBox="0 0 20 20"
               role="button"
@@ -139,49 +123,18 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
           </div>
         </div>
       </section>
-      <hr />
-      <section className="py-[20px]">
-        <h2 className="font-bold">New Issues</h2>
-        {issues.map((issue) => (
-          <IssueCard {...issue} is_alert={true} key={issue.id} />
-        ))}
-      </section>
+      <FeedList />
     </Layout>
   );
 };
 
 export const getServerSideProps = (ctx: NextPageContext) => {
   return withAuth(ctx, async (profile) => {
-    const cookies = parseCookies(ctx);
-
-    try {
-      const response = await getAllIssues(
-        {
-          limit: 20,
-          order: "asc",
-          page: 1,
-        },
-        {
-          Authorization: `Bearer ${cookies.backend_token}`,
-        }
-      );
-
-      console.log({ response });
-
-      return {
-        props: {
-          issues: response.feed,
-          profile,
-        },
-      };
-    } catch (error: unknown) {
-      return {
-        props: {
-          issues: [],
-          profile,
-        },
-      };
-    }
+    return {
+      props: {
+        profile,
+      },
+    };
   });
 };
 
