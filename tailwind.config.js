@@ -17,6 +17,5 @@ module.exports = {
       serif: "Space Grotesk, sans-serif",
     },
   },
-  variants: {},
-  plugins: [],
+  variants: {}
 };

@@ -20,9 +20,11 @@
   "dependencies": {
     "@apollo/client": "^3.5.8",
     "@clerk/nextjs": "^2.11.0",
+    "@radix-ui/react-toggle-group": "^0.1.5",
     "axios": "^0.25.0",
     "color-hash": "^2.0.1",
     "cookie": "^0.4.2",
+    "flowbite": "^1.4.2",
     "goober": "^2.1.8",
     "goober-autoprefixer": "^1.2.1",
     "graphql": "^16.3.0",

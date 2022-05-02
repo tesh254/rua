@@ -12,6 +12,7 @@ import { parseCookies } from "nookies";
 import { handleQuery } from "helpers/axios-graphql";
 import { AuthProvider } from "@/context/auth";
 import { parseCookieOnClient } from "utils/cookies";
+// import 'flowbite';
 
 // This could be the best place to define it once.
 // Since `_app.js is running for both

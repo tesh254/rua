@@ -89,8 +89,12 @@ export async function getSingleIssue(variables: {
 }
 
 export async function getIssueFromS3(hostedUrl) {
+    const baseURL: unknown = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     try {
-        const response = await axios.get(hostedUrl);
+        const response = await axios.post(`${baseURL}/get-email-data`, {
+            hosted_url: hostedUrl
+        });
 
         return response.data;
     } catch (error) {
