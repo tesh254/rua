@@ -94,7 +94,7 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
           });
         }}
       />
-      
+
       <section className="flex flex-wrap justify-center">
         <div className="flex flex-col place-items-center py-2">
           <h1 className="text-[24px]">
@@ -123,7 +123,9 @@ const Inbox: NextPage<Props> = ({ profile, issues }) => {
           </div>
         </div>
       </section>
-      <FeedList />
+      <div className="px-[16px]">
+        <FeedList />
+      </div>
     </Layout>
   );
 };

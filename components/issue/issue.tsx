@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import parse from "html-react-parser";
 import { parseCookies } from "nookies";
 import { getIssueFromS3 } from "@/context/issues/services";
-import { getSingleIssue } from "./services";
+import { getSingleIssue, markIssueAsHidden, markIssueAsRead } from "./services";
 
 interface IIssue {
   title: string;
@@ -11,6 +11,9 @@ interface IIssue {
     source_email: string;
     source_name: string;
   };
+  id: string;
+  is_read: boolean;
+  is_hidden: boolean;
 }
 
 interface IS3Data {
@@ -53,6 +56,36 @@ const Issue: FC<Props> = ({ issue_id }) => {
       });
   }, []);
 
+  function handleMarkingAsRead() {
+    markIssueAsRead(issue.id, issue.is_read)
+      .then((res) => {
+        setIssue((prev) => ({
+          ...prev,
+          is_read: res.is_read,
+        }));
+        toast.success("Issue marked as read");
+      })
+      .catch((err) => {
+        setError(err);
+        toast.error(err.message);
+      });
+  }
+
+  function handleMarkingAsHidden() {
+    markIssueAsHidden(issue.id, issue.is_hidden)
+      .then((res) => {
+        setIssue((prev) => ({
+          ...prev,
+          is_hidden: res.is_hidden,
+        }));
+        toast.success("Issue was archived");
+      })
+      .catch((err) => {
+        setError(err);
+        toast.error(err.message);
+      });
+  }
+
   return (
     <section className="w-full relative py-2">
       {!loading && (
@@ -77,31 +110,35 @@ const Issue: FC<Props> = ({ issue_id }) => {
               />
             </svg>
           </button>
-          <button
-            type="button"
-            className="p-2 text-gray-500 rounded-md hover:ring-2 hover:ring-gray-500/50"
-            style={{ transition: ".3s all" }}
-            title="Mark as read"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+          {!issue.is_read && (
+            <button
+              type="button"
+              className="p-2 text-gray-500 rounded-md hover:ring-2 hover:ring-gray-500/50"
+              style={{ transition: ".3s all" }}
+              title="Mark as read"
+              onClick={handleMarkingAsRead}
             >
-              <path
-                fillRule="evenodd"
-                d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
-                clipRule="evenodd"
-              />
-              <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                  clipRule="evenodd"
+                />
+                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+              </svg>
+            </button>
+          )}
           <button
             type="button"
             className="p-2 text-red-500 rounded-md hover:ring-2 hover:ring-red-500/50"
             style={{ transition: ".3s all" }}
             title="Archive newsletter"
+            onClick={handleMarkingAsHidden}
           >
             <svg
               className="w-6 h-6"
@@ -147,75 +184,29 @@ const Issue: FC<Props> = ({ issue_id }) => {
         <p className="font-extrabold text-2xl">Issue was not found</p>
       )}
       {!loading && issue && (
-        <section className="w-full relative py-2">
-          <section
-            style={{ transition: ".2s all" }}
-            className="fixed opacity-50 left-[45%] hover:opacity-100 ring-gray-400 ring-2 rounded-md p-1 bg-white flex drop-shadow-xl bottom-[16px] z-[999]"
-          >
-            <button
-              type="button"
-              data-tooltip-target="tooltip-default"
-              className="p-2 rounded-md hover:ring-2 hover:ring-green-500/50 text-green-500"
-              style={{ transition: ".3s all" }}
-              title="Add to category"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clipRule="evenodd"
-                  d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm7 5a1 1 0 00-2 0v1H8a1 1 0 000 2h1v1a1 1 0 002 0v-1h1a1 1 0 000-2h-1V9z"
-                  fillRule="evenodd"
-                />
-              </svg>
-            </button>
-            <button
-              type="button"
-              className="p-2 text-gray-500 rounded-md hover:ring-2 hover:ring-gray-500/50"
-              style={{ transition: ".3s all" }}
-              title="Mark as read"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
-                  clipRule="evenodd"
-                />
-                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              className="p-2 text-red-500 rounded-md hover:ring-2 hover:ring-red-500/50"
-              style={{ transition: ".3s all" }}
-              title="Archive newsletter"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                <path
-                  fillRule="evenodd"
-                  d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </section>
-          <h1 className="font-extrabold text-center text-[32px]">
-            {issue.title}
-          </h1>
+        <section>
+          <div className="flex place-items-center justify-center">
+            <h1 className="font-extrabold text-center text-[32px]">
+              {issue.title}
+            </h1>
+            {issue.is_hidden && (
+              <div className="text-gray-300 ml-[8px]">
+                <svg
+                  className="w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                  <path
+                    fillRule="evenodd"
+                    d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
           {console.log({ issue })}
           <p className="text-[20px] text-gray-500 text-center">
             {issue.subscription.source_email}
