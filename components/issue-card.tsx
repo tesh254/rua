@@ -35,7 +35,7 @@ function IssueCard({
           <a>
             <section
               className={`${
-                is_read ? "text-gray-400" : "text-black"
+                is_read ? "text-gray-500" : "text-black"
               } flex place-items-center py-4 border-b-2 justify-between`}
             >
               <p className="">

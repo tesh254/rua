@@ -63,13 +63,25 @@ const Issue: FC<Props> = ({ issue_id }) => {
           ...prev,
           is_read: res.is_read,
         }));
-        toast.success("Issue marked as read");
+        // toast.success("Issue marked as read");
       })
       .catch((err) => {
         setError(err);
         toast.error(err.message);
       });
   }
+
+  useEffect(() => {
+    if (issue?.id && !issue.is_read) {
+      const timeout = setTimeout(() => {
+        handleMarkingAsRead();
+      }, 1000);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [issue?.id]);
 
   function handleMarkingAsHidden() {
     markIssueAsHidden(issue.id, issue.is_hidden)
@@ -78,7 +90,7 @@ const Issue: FC<Props> = ({ issue_id }) => {
           ...prev,
           is_hidden: res.is_hidden,
         }));
-        toast.success("Issue was archived");
+        toast.success(`Issue was ${res.is_hidden ? "unarchived" : "archived"}`);
       })
       .catch((err) => {
         setError(err);
@@ -90,7 +102,7 @@ const Issue: FC<Props> = ({ issue_id }) => {
     <section className="w-full relative py-2">
       {!loading && (
         <section className="fixed opacity-50 left-[45%] hover:opacity-100 ring-gray-400 ring-2 rounded-md p-1 bg-white flex drop-shadow-xl bottom-[16px] z-[999]">
-          <button
+          {/* <button
             type="button"
             data-tooltip-target="tooltip-default"
             className="p-2 rounded-md hover:ring-2 hover:ring-green-500/50 text-green-500"
@@ -109,31 +121,8 @@ const Issue: FC<Props> = ({ issue_id }) => {
                 fillRule="evenodd"
               />
             </svg>
-          </button>
-          {!issue.is_read && (
-            <button
-              type="button"
-              className="p-2 text-gray-500 rounded-md hover:ring-2 hover:ring-gray-500/50"
-              style={{ transition: ".3s all" }}
-              title="Mark as read"
-              onClick={handleMarkingAsRead}
-            >
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
-                  clipRule="evenodd"
-                />
-                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-              </svg>
-            </button>
-          )}
-          <button
+          </button> */}
+          {/* <button
             type="button"
             className="p-2 text-red-500 rounded-md hover:ring-2 hover:ring-red-500/50"
             style={{ transition: ".3s all" }}
@@ -153,7 +142,7 @@ const Issue: FC<Props> = ({ issue_id }) => {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
+          </button> */}
         </section>
       )}
       {loading && (
@@ -206,15 +195,13 @@ const Issue: FC<Props> = ({ issue_id }) => {
                 </svg>
               </div>
             )}
-          </div>
-          {console.log({ issue })}
+          </div>=
           <p className="text-[20px] text-gray-500 text-center">
             {issue.subscription.source_email}
           </p>
           <section className="mx-auto">
             <section className="shadow-inner">
               {parse(s3Data.html)}
-              {/* <iframe srcDoc={s3_data.html} className="w-full h-full max-h-[100vh] min-h-[90vh]" frameBorder="0" /> */}
             </section>
           </section>
         </section>

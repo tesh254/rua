@@ -1,4 +1,5 @@
 import getConfig from "next/config";
+import jwtDecode from "jwt-decode";
 
 import Layout from "@/components/layout";
 import Image from "next/image";
@@ -6,12 +7,20 @@ import Image from "next/image";
 import { HOME_PAGE_COPY } from "copy/homepage";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useEffect } from "react";
 
-const { publicRuntimeConfig } = getConfig();
-// const { name } = publicRuntimeConfig.site;
-
-const Home = () => {
+const { publicRuntimeConfig } = getConfig();const Home = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+
+    if (token) {
+      const data = jwtDecode(token);
+
+      console.log(data);
+    }
+  }, [])
 
   return (
     <Layout has_footer={true} is_readonly={true}>
