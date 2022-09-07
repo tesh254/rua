@@ -1,41 +1,52 @@
 import getConfig from "next/config";
 import jwtDecode from "jwt-decode";
+import { Magic } from "magic-sdk";
 
 import Layout from "@/components/layout";
 import Image from "next/image";
 
 import { HOME_PAGE_COPY } from "copy/homepage";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { OAuthExtension } from "@magic-ext/oauth";
+import { NextPageContext } from "next";
+import { parseCookies } from "nookies";
 
-const { publicRuntimeConfig } = getConfig();const Home = () => {
-  const router = useRouter();
+const { publicRuntimeConfig } = getConfig();
+const Home = () => {
+  const [magic, setMagicClient] = useState<any>();
 
   useEffect(() => {
-    const token = localStorage.getItem('auth_token');
+    const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PB_KEY, {
+      extensions: [new OAuthExtension()],
+    });
 
-    if (token) {
-      const data = jwtDecode(token);
+    setMagicClient(magic);
+  }, []);
 
-      console.log(data);
-    }
-  }, [])
+  function handleSubmit(e: { preventDefault: () => void }) {
+    e.preventDefault();
+
+    const callbackURL: unknown = process.env.NEXT_PUBLIC_MAGIC_CALLBACK_URL;
+
+    (async () => {
+      await magic.oauth.loginWithRedirect({
+        provider: "twitter",
+        redirectURI: callbackURL as string,
+        scope: ["user:email"],
+      });
+    })();
+  }
 
   return (
     <Layout has_footer={true} is_readonly={true}>
       <section className="py-4">
-        <section className="flex justify-between">
+        <section className="flex justify-center">
           <Image
             src="/images/rua-logo-gray.svg"
             alt="rua-logo"
             width={87.57}
             height={26}
           />
-
-          <Link href={`/access?form=signin`}>
-            <a className="font-extrabold">Sign In</a>
-          </Link>
         </section>
         <section className="pb-4 pt-16 text-center">
           <h1 className="font-extrabold text-5xl">
@@ -49,9 +60,7 @@ const { publicRuntimeConfig } = getConfig();const Home = () => {
         <section className="flex justify-center">
           <section className="flex flex-col place-items-center">
             <button
-              onClick={() => {
-                router.push(`/api/twitter/authorize`);
-              }}
+              onClick={handleSubmit}
               className="flex w-full text-center justify-center bg-black place-items-center py-2 rounded-lg text-white"
             >
               <p className="font-bold my-1 mx-16">Sign in with Twitter</p>
@@ -86,6 +95,26 @@ const { publicRuntimeConfig } = getConfig();const Home = () => {
       </section>
     </Layout>
   );
+};
+
+export const getServerSideProps = (ctx: NextPageContext) => {
+  const res = parseCookies(ctx);
+
+  const id: unknown = res && jwtDecode(res.backend_token);
+
+  if (id) {
+    return {
+      props: {},
+      redirect: {
+        permanent: false,
+        destination: "/inbox",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default Home;

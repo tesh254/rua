@@ -6,7 +6,7 @@ import { getOAuthAccessTokenWith, oauthGetUserById } from 'utils/twitter';
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const oauthData = JSON.parse(parseCookies({ req}).oauthData);
+        const oauthData = JSON.parse(parseCookies({ req }).oauthData);
 
         const { oauth_verifier: oauthVerifier }: any = req.query;
 

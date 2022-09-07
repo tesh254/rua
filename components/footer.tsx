@@ -29,7 +29,7 @@ const Footer: FC<{}> = () => {
     <footer className="flex justify-between place-items-center max-w-screen-md mx-auto">
       {LINKS.map((link) => {
         return (
-          <section>
+          <section key={link.label}>
             <Link href={link.path}>
               <a className="font-bold mx-2">{link.label}</a>
             </Link>
