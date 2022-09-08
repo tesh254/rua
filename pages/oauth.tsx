@@ -44,7 +44,7 @@ function Oauth() {
         width={87.57}
         height={26}
       />
-      <div className="py-4 text-center">Hold on we are logging you in</div>
+      <div className="py-4 text-center">I promise this is the last spinner you see 😊</div>
 
       <div>
         <svg
