@@ -100,16 +100,18 @@ const Home = () => {
 export const getServerSideProps = (ctx: NextPageContext) => {
   const res = parseCookies(ctx);
 
-  const id: unknown = res && jwtDecode(res.backend_token);
+  if (res && res.backend_token) {
+    const id: unknown = res && jwtDecode(res.backend_token);
 
-  if (id) {
-    return {
-      props: {},
-      redirect: {
-        permanent: false,
-        destination: "/inbox",
-      },
-    };
+    if (id) {
+      return {
+        props: {},
+        redirect: {
+          permanent: false,
+          destination: "/inbox",
+        },
+      };
+    }
   }
 
   return {
