@@ -17,6 +17,7 @@ const Home = () => {
 
   useEffect(() => {
     const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PB_KEY, {
+      // @ts-ignore
       extensions: [new OAuthExtension()],
     });
 
@@ -30,9 +31,8 @@ const Home = () => {
 
     (async () => {
       await magic.oauth.loginWithRedirect({
-        provider: "twitter",
+        provider: "google",
         redirectURI: callbackURL as string,
-        scope: ["user:email"],
       });
     })();
   }
@@ -63,7 +63,7 @@ const Home = () => {
               onClick={handleSubmit}
               className="flex w-full text-center justify-center bg-black place-items-center py-2 rounded-lg text-white"
             >
-              <p className="font-bold my-1 mx-16">Sign in with Twitter</p>
+              <p className="font-bold my-1 mx-16">Sign in with Google</p>
             </button>
           </section>
         </section>

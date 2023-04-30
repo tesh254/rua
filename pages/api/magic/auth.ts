@@ -7,9 +7,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") return res.status(405).end();
 
     try {
-        const { name, preferredUsername, email, profile } = req.body;
+        const { name, email, picture: profile } = req.body;
 
-        if (!name || !preferredUsername || !email || !profile) return res.status(400).json({
+        const preferredUsername = email.split("@")[0];
+
+        if (!name || !email || !profile) return res.status(400).json({
             message: "Cannot get result"
         });
 
@@ -18,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             username: preferredUsername,
             password: "",
             account_avatar: profile,
-            auth_type: "twitter"
+            auth_type: "google"
         }
 
         const options: AxiosGraphqlOptions = {

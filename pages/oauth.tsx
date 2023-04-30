@@ -14,11 +14,13 @@ function Oauth() {
 
   useEffect(() => {
     const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PB_KEY, {
+      // @ts-ignore
       extensions: [new OAuthExtension()],
     });
 
     const render = async () => {
       try {
+        // @ts-ignore
         const result = await magic.oauth.getRedirectResult();
 
         const res = await axios.post("/api/magic/auth", result.oauth.userInfo);
@@ -44,7 +46,9 @@ function Oauth() {
         width={87.57}
         height={26}
       />
-      <div className="py-4 text-center">I promise this is the last spinner you see 😊</div>
+      <div className="py-4 text-center">
+        I promise this is the last spinner you see 😊
+      </div>
 
       <div>
         <svg
