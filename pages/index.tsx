@@ -51,7 +51,7 @@ const Home = () => {
         </section>
         <section className="pb-4 pt-16 text-center">
           <h1 className="font-extrabold text-5xl">
-            A digest for all your newsletter subscription
+            A digest for all your newsletter subscriptions
           </h1>
           <p className="text-lg text-gray-600">
             <strong>rua </strong> makes it easy to read and manage all your
