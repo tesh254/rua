@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { OAuthExtension } from "@magic-ext/oauth";
 import { NextPageContext } from "next";
 import { parseCookies } from "nookies";
+import Link from "next/link";
 
 const { publicRuntimeConfig } = getConfig();
 const Home = () => {
@@ -65,6 +66,26 @@ const Home = () => {
             >
               <p className="font-bold my-1 mx-16">Sign in with Google</p>
             </button>
+            <p className="text-xs mt-[8px]">
+              By signing in you agree to rua's{" "}
+              <Link
+                style={{
+                  color: "#CB0C0C !important",
+                }}
+                href="/terms"
+              >
+                t&c
+              </Link>{" "}
+              and{" "}
+              <Link
+                style={{
+                  color: "#CB0C0C !important",
+                }}
+                href="/privacy"
+              >
+                privacy policy
+              </Link>
+            </p>
           </section>
         </section>
         <section className="w-95 h-96 my-4 flex justify-center rounded-lg">

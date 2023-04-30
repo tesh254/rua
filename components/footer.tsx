@@ -6,22 +6,22 @@ const LINKS = [
     label: "Pricing",
     path: "/pricing",
   },
-  {
-    label: "Blog",
-    path: "/blog",
-  },
+  // {
+  //   label: "Blog",
+  //   path: "/blog",
+  // },
   {
     label: "Terms",
     path: "/terms",
   },
   {
-    label: "Policy",
-    path: "/policy",
+    label: "Privacy Policy",
+    path: "/privacy",
   },
-  {
-    label: "Status",
-    path: "/status",
-  },
+  // {
+  //   label: "Status",
+  //   path: "/status",
+  // },
 ];
 
 const Footer: FC<{}> = () => {
