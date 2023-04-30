@@ -195,7 +195,7 @@ const Issue: FC<Props> = ({ issue_id }) => {
                 </svg>
               </div>
             )}
-          </div>=
+          </div>
           <p className="text-[20px] text-gray-500 text-center">
             {issue.subscription.source_email}
           </p>
